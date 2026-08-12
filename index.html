@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEREMONIA RONDA 54: PARTYGIRL V4</title>
+<style>
+  @keyframes neonPulse {
+    0%, 100% { text-shadow: 0 0 4px #39FF14, 0 0 12px #39FF14, 0 0 24px #39FF14, 0 0 40px rgba(57,255,20,0.3); }
+    50% { text-shadow: 0 0 2px #39FF14, 0 0 8px #39FF14, 0 0 16px #39FF14, 0 0 30px rgba(57,255,20,0.2); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(6px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  }
+  @keyframes glowBorder {
+    0%, 100% { box-shadow: 0 0 12px rgba(57,255,20,0.15), inset 0 0 20px rgba(57,255,20,0.04); }
+    50% { box-shadow: 0 0 20px rgba(57,255,20,0.25), inset 0 0 30px rgba(57,255,20,0.08); }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 12px;
+  }
+  #app {
+    width: 100%;
+    max-width: 540px;
+    position: relative;
+  }
+  #app::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(57,255,20,0.025) 2px, rgba(57,255,20,0.025) 4px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .header .pre-title {
+    font-size: 11px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    color: #39FF14;
+    animation: neonPulse 2.5s ease-in-out infinite;
+    line-height: 1.1;
+  }
+  .counter {
+    position: absolute;
+    top: 4px;
+    right: 0;
+    font-size: 13px;
+    color: #444;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+  .counter span { color: #39FF14; }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    border: 1.5px solid #39FF14;
+    border-radius: 12px;
+    background: #0a0a0a;
+    padding: 24px;
+    animation: glowBorder 3s ease-in-out infinite;
+  }
+  .card.transitioning { animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1), glowBorder 3s ease-in-out infinite; }
+
+  .puesto-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 10px;
+  }
+  .puesto-num {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+    color: #39FF14;
+    text-shadow: 0 0 10px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.3);
+    letter-spacing: -2px;
+  }
+  .puesto-num.desc {
+    font-size: 30px;
+    color: #ff4444;
+    text-shadow: 0 0 10px rgba(255,68,68,0.6), 0 0 30px rgba(255,68,68,0.3);
+  }
+  .puesto-label {
+    font-size: 10px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+  }
+  .song {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    margin: 14px 0 4px;
+    line-height: 1.25;
+    word-break: break-word;
+    letter-spacing: -0.3px;
+  }
+  .meta {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 18px;
+    font-weight: 400;
+  }
+  .meta strong { color: #39FF14; font-weight: 600; }
+
+  .sec { margin-top: 14px; }
+  .sec-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #444;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+  }
+  .sec-title.lovers { color: #39FF14; }
+  .sec-title.haters { color: #ff4444; }
+  .sec-title.wall { color: #888; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+  .dot.lovers { background: #39FF14; box-shadow: 0 0 8px #39FF14; }
+  .dot.haters { background: #ff4444; box-shadow: 0 0 8px #ff4444; }
+  .dot.wall { background: #555; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag-lover {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: rgba(57,255,20,0.12);
+    border: 1px solid rgba(57,255,20,0.4);
+    color: #39FF14;
+    font-weight: 600;
+    text-shadow: 0 0 6px rgba(57,255,20,0.4);
+    box-shadow: 0 0 8px rgba(57,255,20,0.1);
+  }
+  .tag-hater {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: rgba(255,68,68,0.12);
+    border: 1px solid rgba(255,68,68,0.4);
+    color: #ff4444;
+    font-weight: 600;
+    text-shadow: 0 0 6px rgba(255,68,68,0.4);
+    box-shadow: 0 0 8px rgba(255,68,68,0.1);
+  }
+  .tag-empty {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: #111;
+    border: 1px dashed #333;
+    color: #444;
+    font-style: italic;
+  }
+
+  .wall {
+    max-height: 180px;
+    overflow-y: auto;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #999;
+    padding-right: 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .wall::-webkit-scrollbar { width: 3px; }
+  .wall::-webkit-scrollbar-thumb { background: #39FF14; border-radius: 2px; }
+  .cmt { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #151515; }
+  .cmt:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    position: relative;
+    z-index: 1;
+    gap: 12px;
+  }
+  .nav button {
+    background: transparent;
+    border: 1.5px solid #39FF14;
+    color: #39FF14;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    font-weight: 600;
+  }
+  .nav button:hover:not(:disabled) {
+    background: #39FF14;
+    color: #000;
+    box-shadow: 0 0 16px rgba(57,255,20,0.5);
+  }
+  .nav button:disabled {
+    border-color: #2a2a2a;
+    color: #333;
+    cursor: not-allowed;
+  }
+  .dots {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .dot-nav {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #1a1a1a;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s;
+  }
+  .dot-nav.active {
+    background: #39FF14;
+    box-shadow: 0 0 8px #39FF14;
+    transform: scale(1.4);
+  }
+  .dot-nav.desc { background: #331111; }
+  .dot-nav.desc.active { background: #ff4444; box-shadow: 0 0 8px #ff4444; }
+
+  .points {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    padding: 5px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 6px;
+  }
+  .points .num { color: #39FF14; font-weight: 700; font-size: 18px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="counter"><span id="curr">1</span> / <span id="tot">19</span></div>
+    <div class="pre-title">ceremonia</div>
+    <h1>RONDA 54:<br>PARTYGIRL V4</h1>
+  </div>
+
+  <div class="card" id="cardWrap">
+    <div id="cardInner"></div>
+  </div>
+
+  <div class="nav">
+    <button id="btnPrev" onclick="go(-1)">← anterior</button>
+    <div class="dots" id="dotBox"></div>
+    <button id="btnNext" onclick="go(1)">siguiente →</button>
+  </div>
+</div>
+
+<script>
+const authorColors = {
+  "Andres":"#FF6B6B","Kevin":"#4ECDC4","Joel":"#45B7D1","Lenis":"#96CEB4",
+  "Diego":"#FFEAA7","Henry":"#DDA0DD","Carlos":"#98D8C8","Bhra":"#F7DC6F",
+  "Angel":"#BB8FCE","Oscar":"#85C1E9","Liu":"#F8B500","Mario":"#FF7675",
+  "Eduardo":"#74B9FF","Gemma":"#A29BFE","Abel":"#FD79A8","Miguel":"#00B894",
+  "Jota":"#E17055","Ricardo":"#6C5CE7","Daniel":"#00CEC9"
+};
+
+const data = [
+  { puesto: "DESCALIFICADO", original: 2, song: "camoufly - Always", pts: 126, sender: "Daniel", lovers: ["Carlos"], haters: ["Miguel"], wall: "Andres: Dicen que esto no es para fiesta, pero yo si iria a esta fiesta aunque sea en Balu\nKevin: Un inicio algo chill. No todo tiene que ser poppers y bum bum\nJoel: *culito de lado y lado*\nLenis: Esta rica\nDiego: Bueno mi cuca se movió en trance, huele a Henry\nHenry: BANGER!\nCarlos: Vi comentarios mixtos de esta canción. Pero a mí me encantó mucho y más como Opener siento que tiene todo lo que hay que tener.\nBhra: UN PROLAPSO!\nAngel: Hermosa para iniciar la playlist, la veo sonando en modo\nLiu: always always always puta cancion no salia de mi cabeza", isDesc: true },
+  { puesto: 18, song: "Andrés Belloso - Ramillete De Flores (Remix)", pts: 78, sender: "Jota", lovers: [], haters: ["Andres","Lenis","Diego","Oscar","Liu"], wall: "Andres: Es lo que suena cuando vomitas todo el acohol\nLenis: Y esta fiesta?\nDiego: Fuera la Moscar! Que fiesta tan aburrida\nHenry: Normal, pa empezar\nCarlos: Me pareció una interesante propuesta para la lista a pesar de que quizás no sea la mejor siento que destaca y no es tan olvidable.\nBhra: Perfecta para ir al baño en el entretiempo\nAngel: No termina de transicionar...\nOscar: La mezcla está rara oíste\nLiu: en esta party de santeros si dan comida? elegua me va a escupir cuando baje o como?" },
+  { puesto: 17, song: "Nova May - SEXUALITY", pts: 95, sender: "Ricardo", lovers: [], haters: ["Eduardo","Diego"], wall: "Andres: Para servirse unos traguitos\nEduardo: esta sí me dió leves ganas de arrancarme los oídos\nDiego: Si esta es la nueva mey qué traigan a la vieja mey\nCarlos: La canción no está mal solo que creo que no es para nada su lista, quizás en otra.\nAngel: Love her voice!\nOscar: Me molesta? No. La volvería a escuchar? Tampoco no" },
+  { puesto: 16, song: "Emilia - La_Playlist.mpeg", pts: 99, sender: "Miguel", lovers: ["Angel"], haters: ["Bhra","Jota"], wall: "Mario: un gag es un gag !!\nAndres: Con algun tipo de remix hubiese funcionado mejor\nEduardo: Estaba pensando que me daba un 90s vibe y de repente ella yque volvimos pa los nineties... Witch!\nKevin: Like, me gusta but cute next to gorgeous...\nLenis: Floja pero gusta\nDiego: Penis en España bailando esto\nHenry: No se, no me figuro mucho\nCarlos: No me pareció mala canción para nada. Quizás no sea su lista completamente pero hay otras que están más descolocadas que ella.\nAngel: Carlos:" },
+  { puesto: 15, song: "Donna Summer - I Feel Love - Rollo & Sister Bliss Monster Mix", pts: 101, sender: "Abel", lovers: ["Andres"], haters: ["Kevin","Lenis","Jota","Liu"], wall: "Andres: 10 para carlos por esas transiciones... espero la haya mandado ella\nEduardo: Es muy buena hasta que de repente quiero que se termine\nKevin: Donna Summer en una ronda de party girls? Flowers for spring? Floja\nJoel: Donna te amo\nLenis: La canción mas refrita del mundo? Flojas\nDiego: Dos palabras: UH AH\nHenry: Normal, ahi va\nCarlos: Me encanto el remix. Sería un 10 si no fuese porque ya hemos escuchado la original. Sin embargo, Abel me la envió con la intención de que la mixeara y fue una de las canciones que más fácilmente pude mixear, el intro y el outro son increíbles.\nBhra: Quien la mandó me le pongo en 4 right now\nAngel: Esta buena, pero en una rave pondrian la original...\nJota: Lo unico bueno fue la transición\nLiu: never gets old… for some" },
+  { puesto: 14, song: "Joey Cash - lose control", pts: 104, sender: "Mario", lovers: ["Andres","Diego","Ricardo"], haters: ["Eduardo","Kevin","Lenis"], wall: "Mario: estas son las voces en mi cabeza actualmente\nAndres: Ganadora junto a kokichiwa bitches\nKevin: Estamos en una histeria colectiva que esto les gusta? Suena como una canción que saldría en Digital Circus (derogatory)\nDiego: Timeless hit (Salió el año pasado)\nHenry: Muy 2000\nAngel: Linda!!!\nLiu: 🪛 put it on a blender, vomit on it" },
+  { puesto: 13, song: "Saska - Breach", pts: 106, sender: "Diego", lovers: ["Mario","Ricardo"], haters: ["Oscar"], wall: "Mario: dice diego por todos lados\nAndres: Intro de youtuber circa 2013\nKevin: La había olvidado la verdad.\nHenry: Diego?\nBhra: Perfecta para hacer el lipsync a lo Aja modo electrocutada\nAngel: ...linda!\nOscar: Comienza como la de Shake It Up. Yo sé que a RuPaul le habría gustado" },
+  { puesto: 12, song: "deBasement - F.F.F.T.DJ", pts: 107, sender: "Oscar", lovers: ["Mario"], haters: ["Eduardo"], wall: "Mario: con razón kim petras la tenía en el sótano trabajando en su álbum. la mejor canción de la lista.\nAndres: Me cogi a un dj!\nKevin: Mid.\nLenis: ? Quejesto\nDiego: Pound the alarm! *Ojos de monet\nCarlos: Kinda middle of the road pero no es mala, un dolor de cabeza para mixear un poquito.\nAngel: Hay que comerse a Geo a ver si saca nuevo mix\nOscar: Para cuándo me cojo al DJ Carlos??\nLiu: oh she knows the DJ!!" },
+  { puesto: 11, song: "cassö - Prada", pts: 108, sender: "Bhra", lovers: [], haters: ["Diego","Gemma"], wall: "Andres: Que rica me siento sexy\nEduardo: Me llevó un poco a los 90 in a good way\nKevin: Yaaaas bitch raye.\nDiego: Y donde estaba el esposo?\nHenry: Escuchable diria yo\nCarlos: Suena un poco genérica canción de DJ de festival a veces pero raye salva un poco el evento\nAngel: Linda!!!\nLiu: gracias a dios fue corta" },
+  { puesto: 10, song: "3BallMTY - Inténtalo", pts: 108, sender: "Andres", lovers: ["Mario","Abel","Angel"], haters: ["Eduardo","Kevin","Joel","Liu"], wall: "Mario: el que mandó esto, sabe\nAndres: A las que no les gusto nunca han ido a una fiesta de verdad\nKevin: Lo siento por la persona que mandó esta canción, estaba vibrando con la lista y cuando salió esta canción fue como si estuviera teniendo una parálisis del sueño, una pesadilla de la que no puedo despertar.\nLenis: Hsksjsks guilty pleasure\nDiego: Diosa Canales singando\nHenry: Instant classic\nCarlos: No comments\nBhra: Ines Perada\nAngel: Increible, dios mio. Conecta conmigo a niveles intimos y Latinoaméricanos\nOscar: Ángel se puso a bailar desaforadamente con esta canción\nLiu: no pero en serio, intentalo pella bella" },
+  { puesto: 9, song: "VICKY - FKK", pts: 110, sender: "Liu", lovers: ["Mario"], haters: ["Eduardo","Abel","Bhra"], wall: "Andres: Me siento como una putica alemana\nKevin: Jose Suárez, lass mich deine Füße küssen\nDiego: Yo cuando soy Ikkimel pero me llamo Vicky\nHenry: No mi tipo pero bueno, se escucha\nCarlos: La primita perdida de ikkimel\nAngel: Es alemana!!\nOscar: Hasta cuándo Jota\nLiu: se me cayo el marcapasos ayudaa 🧑‍🦯‍➡️🧑‍🦯" },
+  { puesto: 8, song: "Sextile - Women Respond to Bass", pts: 111, sender: "Gemma", lovers: ["Mario"], haters: ["Diego"], wall: "Andres: Continuacion de tempo\nEduardo: That bass is lame\nKevin: Música de lesbianas y soy lesbiana.\nJoel: Gaga?\nLenis: Respondan!\nDiego: El intro de Kim Possible extendido\nCarlos: Hay un momento en donde me aturde un poqui pero luego se hace disfrutable, igual es colapso.\nAngel: Linda!\nLiu: hide the cocaine" },
+  { puesto: 7, song: "Kyra Machida - Handsy", pts: 112, sender: "Lenis", lovers: ["Carlos"], haters: ["Bhra"], wall: "Mario: estos nachos de britney saben ricos\nAndres: Solo me gusta porque me recuerda a la canción de fiesta de habbo\nEduardo: le voy a poner 5 porque no decido si me gusta o la odio\nLenis: Hottiee\nDiego: Ella dijo jazz hands\nCarlos: Tengo sentimientos encontrados con ella porque siento que no es su lista pero al mismo tiempo da como ganitas de putear y zorrear y la canción no está mala para nada, es como pícara... Lenis puta\nAngel: Muy buena canción para terminar la rumba. Mencion especial para Carlos que hizo una playlist muy muy rica 💖\nOscar: Increíble producción, de verdad que sí" },
+  { puesto: 6, song: "Afro Medusa - Pasilda - Knee Deep Mix", pts: 115, sender: "Carlos", lovers: [], haters: ["Lenis"], wall: "Andres: Fiesta en la playa que ricoooooo\nKevin: Cuando fui a votar me di cuenta que no estaba en portugues. Muy abel coded\nJoel: Abel?\nLenis: Un poco rarita esta fiesta\nDiego: MI GENTE LATINA, medio se parece al opening de Mr Trance\nHenry: Muy rica, senti como mis caderas pedian compañia\nCarlos: Es la bebé. Simplemente busque en mis likes de Spotify por alguna que me gustase y quedara bien y ella fue la primera que apareció\nBhra: Que sabroso. Buena propuesta, Abel\nAngel: Sabrosa para un mix, pero se alarga mucho!\nRicardo: Yo pensé que decía 'No se cansa de tirar'" },
+  { puesto: 5, song: "Tommy Genesis - TEMPO", pts: 116, sender: "Joel", lovers: ["Mario","Gemma"], haters: ["Abel"], wall: "Andres: Flojona ante sus contrincantes y mas si viene justo despues de konichiwa bitches\nKevin: Tempo tempo tempo tempo\nLenis: Con 4 pepas de extasis pasa colada\nDiego: Lyrics: Tempo (x100) by Henry\nHenry: Ujummmm de esto es lo que estoy hablando.\nCarlos: Ella peca de repetitiva sin embargo la música de fiesta peca de eso también entonces no la puedo juzgar tanto por ello, igual es muy buena.\nAngel: Linda!\nLiu: not my tempo" },
+  { puesto: 4, song: "Noro$t - Dejela Sonar", pts: 117, sender: "Angel", lovers: ["Mario","Kevin","Diego","Carlos"], haters: ["Lenis","Bhra"], wall: "Andres: Dejala de sonar!\nKevin: La persona que mandó esto se dio pero riquisimo. Dios te bendiga.\nLenis: No sonó\nDiego: DESE DURO LA QUE MANDO ESTA VAINA\nHenry: Te amo\nCarlos: Para ser su primera participación en el grupo esto estuvo muy bueno como debut.\nAngel: Bailamos pa razonar...\nLiu: muy buena chalupa" },
+  { puesto: 3, song: "VON DI - NASTY", pts: 120, sender: "Henry", lovers: ["Mario","Carlos","Oscar"], haters: [], wall: "Kevin: Nasty pero rica\nDiego: Not bad, si es party girl\nHenry: LA MEJORRRR\nCarlos: Yo iba a mandar esta canción en alguna ronda y no la mandé en esta porque no apareció, muy buena submission de Henry tbh\nAngel: Linda!\nOscar: Dateeeeee" },
+  { puesto: 2, song: "Sheena Ringo - 意識 ～Consciously～ - Shinichi Osawa Remix", pts: 123, sender: "Eduardo", lovers: ["Andres","Carlos","Gemma"], haters: ["Lenis","Miguel"], wall: "Andres: Konichiwa bitches\nEduardo: Esta es la parte en la que más me duele no escuchar las transiciones que arregló Carlos\nKevin: Eduardo te diste con esta. Te ganaste la deslechada.\nLenis: Fiesta china\nDiego: RUMBA EVANGELION!\nHenry: Esta buena ngl\nCarlos: Esta canción es muy versátil. Suena a muñequita de animé y al mismo tiempo a chica rumbera y el mixing de la canción está muy arrecho. Increibleeeee\nAngel: Riquisima, variada, uplifting, sabrosa like tea in the beach\nOscar: La bebé" },
+  { puesto: 1, song: "ØTTA - GATA FINA", pts: 136, sender: "Kevin", lovers: ["Mario","Lenis","Angel","Oscar"], haters: [], wall: "Andres: Quién es Lola Lo lamento Quién es mento Mentolate Quién es late Late coco Quién es coco Cocosete Quién es sete Se te mete Quién es mete Mete oro Quién es oro Oro puro Quién es puro Pan Pan Pero Pero Lito tu abuelito\nKevin: Si no gano yo me hicieron la gatada, entienden? La verdad que lo di todo esta ronda. Ese gato es mio.\nJoel: Gemma. Una parte me recuerda a la sesión de bizarrap con Villano\nLenis: Le daría 11 que ricaa\nDiego: Seria perfecta si durará 2:45\nCarlos: La ganadora según he visto. Veremos. A mi me gusta pero nunca fue mi ganadora. La canción es larguísima pero está bien hecha y no da la sensación de que sea tan larga, es disfrutable.\nBhra: Popper+Apelo\nAngel: OBRA MAESTRA. Que buena dicción tiene la chica, goals\nOscar: Fiah puede ganar de nuevo\nLiu: esta gatita vv trepo hasta el top… o no?" }
+];
+
+let idx = 0;
+const wrap = document.getElementById('cardWrap');
+const inner = document.getElementById('cardInner');
+const currSpan = document.getElementById('curr');
+const totSpan = document.getElementById('tot');
+const dotBox = document.getElementById('dotBox');
+const btnPrev = document.getElementById('btnPrev');
+const btnNext = document.getElementById('btnNext');
+
+totSpan.textContent = data.length;
+
+function colorizeWall(text) {
+  return text.split('\n').map(line => {
+    const m = line.match(/^([^:]+):\s*(.*)$/);
+    if (!m) return `<div class="cmt"><span style="color:#bbb">${line}</span></div>`;
+    const name = m[1].trim();
+    const body = m[2].trim();
+    const col = authorColors[name] || '#999';
+    return `<div class="cmt"><strong style="color:${col}">${name}:</strong> <span style="color:#bbb">${body}</span></div>`;
+  }).join('');
+}
+
+function render() {
+  const d = data[idx];
+  const isDesc = !!d.isDesc;
+  const puestoClass = isDesc ? 'desc' : '';
+  const puestoDisplay = isDesc ? 'DESCALIFICADO' : '#' + d.puesto;
+  const lovers = d.lovers.length ? d.lovers.map(n => `<span class="tag-lover">${n}</span>`).join('') : '<span class="tag-empty">ninguno</span>';
+  const haters = d.haters.length ? d.haters.map(n => `<span class="tag-hater">${n}</span>`).join('') : '<span class="tag-empty">ninguno</span>';
+  const wall = d.wall ? colorizeWall(d.wall) : '<span class="tag-empty">ninguno</span>';
+
+  inner.innerHTML = `
+    <div class="puesto-row">
+      <div>
+        <div class="puesto-label">puesto</div>
+        <div class="puesto-num ${puestoClass}">${puestoDisplay}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="puesto-label">puntos</div>
+        <div class="points"><span class="num">${d.pts}</span> pts</div>
+      </div>
+    </div>
+    <div class="song">${d.song}</div>
+    <div class="meta">enviada por <strong>${d.sender}</strong></div>
+    <div class="sec">
+      <div class="sec-title lovers"><span class="dot lovers"></span> lovers (10/10)</div>
+      <div class="tags">${lovers}</div>
+    </div>
+    <div class="sec">
+      <div class="sec-title haters"><span class="dot haters"></span> haters (1-3)</div>
+      <div class="tags">${haters}</div>
+    </div>
+    <div class="sec">
+      <div class="sec-title wall"><span class="dot wall"></span> wall</div>
+      <div class="wall">${wall}</div>
+    </div>
+  `;
+
+  currSpan.textContent = idx + 1;
+  btnPrev.disabled = idx === 0;
+  btnNext.disabled = idx === data.length - 1;
+  document.querySelectorAll('.dot-nav').forEach((dot, i) => dot.classList.toggle('active', i === idx));
+}
+
+function go(dir) {
+  const next = idx + dir;
+  if (next < 0 || next >= data.length) return;
+  idx = next;
+  wrap.classList.remove('transitioning');
+  void wrap.offsetWidth;
+  wrap.classList.add('transitioning');
+  render();
+}
+function jump(i) { idx = i; wrap.classList.remove('transitioning'); void wrap.offsetWidth; wrap.classList.add('transitioning'); render(); }
+
+data.forEach((d, i) => {
+  const b = document.createElement('button');
+  b.className = 'dot-nav' + (d.isDesc ? ' desc' : '');
+  b.onclick = () => jump(i);
+  dotBox.appendChild(b);
+});
+render();
+</script>
+</body>
+</html>
